@@ -1,0 +1,394 @@
+:root {
+  /* These are overwritten at runtime from src/theme.ts (applyThemeToCss). */
+  --accent: #3b82f6;
+  --accent-rgb: 59, 130, 246;
+  --bg: #05060a;
+  --text: #e8ecf5;
+
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior: none;
+}
+
+#root {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+canvas {
+  display: block;
+  touch-action: none;
+}
+
+a {
+  color: inherit;
+}
+
+/* ───────────────────────────── Overlay (DOM over canvas) ──────────────── */
+
+.overlay-root {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  /* read by children for safe-area on notched phones */
+  --pad: clamp(20px, 5vw, 80px);
+}
+
+.ov-block {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  padding: max(var(--pad), env(safe-area-inset-top)) var(--pad)
+    max(var(--pad), env(safe-area-inset-bottom));
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* Intro / outro are centered; project cards sit to one side. */
+.ov-block.center {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.ov-block.left {
+  align-items: center;
+  justify-content: flex-start;
+}
+.ov-block.right {
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.ov-inner {
+  max-width: 560px;
+}
+/* Hero / outro copy gets more room so the headline never clips. */
+.ov-block.center .ov-inner {
+  max-width: 960px;
+}
+
+.kicker {
+  display: inline-block;
+  font-size: clamp(11px, 1.1vw, 13px);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--accent);
+  margin: 0 0 18px;
+  opacity: 0.95;
+}
+
+.headline {
+  font-size: clamp(28px, 4.4vw, 54px);
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+  white-space: pre-line;
+  text-shadow: 0 4px 60px rgba(0, 0, 0, 0.6);
+}
+
+.subhead {
+  margin: 22px auto 0;
+  max-width: 30ch;
+  font-size: clamp(14px, 1.6vw, 18px);
+  line-height: 1.6;
+  color: rgba(232, 236, 245, 0.72);
+  font-weight: 400;
+}
+
+/* Project cards — a legible glass panel floating over the slab imagery. */
+.ov-card {
+  pointer-events: none;
+  max-width: 420px;
+  padding: 30px 32px;
+  border-radius: 22px;
+  background: rgba(8, 10, 16, 0.55);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+.card-index {
+  font-size: 13px;
+  letter-spacing: 0.25em;
+  font-weight: 600;
+  color: rgba(232, 236, 245, 0.5);
+}
+.card-cat {
+  display: inline-block;
+  margin: 0 0 14px;
+  padding: 6px 12px;
+  border: 1px solid rgba(var(--accent-rgb), 0.5);
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.08);
+}
+.card-title {
+  font-size: clamp(28px, 4.4vw, 52px);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+}
+.card-desc {
+  font-size: clamp(14px, 1.5vw, 18px);
+  line-height: 1.6;
+  color: rgba(232, 236, 245, 0.74);
+  margin: 0 0 24px;
+  max-width: 42ch;
+}
+
+/* Buttons / links */
+.btn {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #050810;
+  box-shadow: 0 10px 40px rgba(var(--accent-rgb), 0.45);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 54px rgba(var(--accent-rgb), 0.6);
+}
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: var(--text);
+}
+.btn-ghost:hover {
+  transform: translateY(-2px);
+  border-color: rgba(var(--accent-rgb), 0.7);
+}
+.btn .arrow {
+  transition: transform 0.25s ease;
+}
+.btn:hover .arrow {
+  transform: translateX(4px);
+}
+
+/* Outro contact line */
+.contact {
+  margin-top: 30px;
+  display: flex;
+  gap: 22px;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: rgba(232, 236, 245, 0.6);
+}
+.contact a {
+  pointer-events: auto;
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.6);
+  padding-bottom: 2px;
+}
+
+/* Scroll hint */
+.scroll-hint {
+  position: fixed;
+  left: 50%;
+  bottom: max(28px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(232, 236, 245, 0.55);
+  pointer-events: none;
+}
+.scroll-hint .mouse {
+  width: 22px;
+  height: 36px;
+  border: 2px solid rgba(232, 236, 245, 0.4);
+  border-radius: 12px;
+  position: relative;
+}
+.scroll-hint .mouse::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 3px;
+  height: 7px;
+  margin-left: -1.5px;
+  background: var(--accent);
+  border-radius: 2px;
+  animation: wheel 1.6s ease-in-out infinite;
+}
+@keyframes wheel {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+}
+
+/* Top-left wordmark, always visible */
+.wordmark {
+  position: fixed;
+  top: max(22px, env(safe-area-inset-top));
+  left: var(--pad);
+  z-index: 6;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  font-size: 14px;
+  pointer-events: none;
+}
+.wordmark .dot {
+  color: var(--accent);
+}
+
+/* ───────────────────────────── Preloader ─────────────────────────────── */
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  background: var(--bg);
+  transition: opacity 0.7s ease;
+}
+.preloader.done {
+  opacity: 0;
+  pointer-events: none;
+}
+.preloader .ring {
+  --p: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(closest-side, var(--bg) 79%, transparent 80% 100%),
+    conic-gradient(var(--accent) calc(var(--p) * 1%), rgba(255, 255, 255, 0.08) 0);
+}
+.preloader .pct {
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.preloader .pl-name {
+  font-size: 13px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(232, 236, 245, 0.5);
+}
+.preloader .pl-bar {
+  width: min(240px, 60vw);
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.preloader .pl-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.8);
+  transition: width 0.2s ease;
+}
+
+/* ───────────────────────────── Fallback (no WebGL) ───────────────────── */
+
+.fallback {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 18px;
+  padding: 40px;
+  background: var(--bg);
+}
+.fallback h1 {
+  font-size: clamp(28px, 5vw, 48px);
+  margin: 0;
+}
+.fallback p {
+  max-width: 46ch;
+  color: rgba(232, 236, 245, 0.7);
+  line-height: 1.6;
+}
+
+/* ───────────────────────────── Reduced motion ───────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint .mouse::after {
+    animation: none;
+  }
+  .btn {
+    transition: none;
+  }
+}
+
+/* A bit more breathing room for project cards on small screens */
+@media (max-width: 720px) {
+  .ov-block.left,
+  .ov-block.right {
+    align-items: flex-end;
+    justify-content: center;
+    text-align: center;
+    padding-bottom: 16vh;
+  }
+  .card-desc {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
