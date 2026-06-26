@@ -145,9 +145,22 @@ All of this is timed in `src/lib/sequence.ts`. To re-time the film, edit the
 
 ---
 
-## Swapping the laptop for a real model
+## The laptop model
 
-`Laptop.tsx` is self-contained and exposes an `openAmount` prop (0 = closed,
-1 = open) that drives the hinge. To use a real `.glb`: load it with drei's
-`useGLTF`, find the lid node, and rotate it by `lerp(0, openAngle, openAmount)`
-in the same `useFrame`. Everything else (camera, fade, ignite) stays the same.
+`Laptop.tsx` loads a real GLB (`src/components/source/laptop.glb`) with a baked
+open/close animation clip, which it **scrubs** from `openAmount` (0 = closed,
+1 = open). The lid node is `Cube001`; the studio screen is an emissive plane
+parented to the lid (the model's own material is a single texture, so the
+glowing "fly-through" screen is recreated this way). The ignite / camera path /
+fade-through are unchanged.
+
+To fit a different model, tune the constants at the top of `Laptop.tsx`:
+`MODEL_SCALE`, `MODEL_ROT_Y`, `MODEL_POS`, and the `SCREEN_*` placement; flip
+`(1 - open)` → `open` in the clip scrub if it opens the wrong way.
+
+### Credit
+
+3D model: **"Low Poly Modern Laptop (with closing animation)"** via Sketchfab,
+licensed **CC BY 4.0**. You must keep attribution to the original author — add
+their name and the model URL here (and ideally a small credit in the site
+footer) before publishing.
