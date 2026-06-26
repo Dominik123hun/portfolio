@@ -36,11 +36,11 @@ const MODEL_ROT_Y = Math.PI
 const MODEL_POS: [number, number, number] = [0, -0.18, 0]
 
 // Emissive screen overlay, in the LID's local space (so it opens with the lid).
-// Sits FLUSH on the model's display face (tiny z offset) and covers the whole
-// display edge-to-edge, so the studio UI reads as content shown FULLSCREEN on
-// the laptop (no desktop / taskbar peeking through).
-const SCREEN_SIZE: [number, number] = [1.35, 0.9]
-const SCREEN_POS: [number, number, number] = [0, 0.46, -0.004]
+// Sits FLUSH on the display (tiny z offset), full width to cover the desktop,
+// but stops just above the model's taskbar so the taskbar stays visible — like
+// a maximized window filling the screen.
+const SCREEN_SIZE: [number, number] = [1.34, 0.78]
+const SCREEN_POS: [number, number, number] = [0, 0.515, -0.004]
 const SCREEN_ROT: [number, number, number] = [0, Math.PI, 0]
 // ─────────────────────────────────────────────────────────────────────────
 
