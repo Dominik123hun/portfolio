@@ -63,6 +63,18 @@ a {
     max(var(--pad), env(safe-area-inset-bottom));
   opacity: 0;
   will-change: opacity, transform;
+  /* Critical: blocks are full-screen, so they must NOT capture wheel/touch —
+     otherwise they'd swallow scrolling. Only controls in a SHOWN section are
+     interactive (see .ov-block.shown rule below). */
+  pointer-events: none;
+}
+
+/* Enable links/buttons only while their section is on screen, so the overlay
+   never blocks scrolling and hidden controls aren't clickable. */
+.ov-block.shown a,
+.ov-block.shown button,
+.ov-block.shown .btn {
+  pointer-events: auto;
 }
 
 /* Intro / outro are centered; project cards sit to one side. */
@@ -166,7 +178,6 @@ a {
 
 /* Buttons / links */
 .btn {
-  pointer-events: auto;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -216,7 +227,6 @@ a {
   color: rgba(232, 236, 245, 0.6);
 }
 .contact a {
-  pointer-events: auto;
   color: var(--text);
   text-decoration: none;
   border-bottom: 1px solid rgba(var(--accent-rgb), 0.6);

@@ -118,8 +118,9 @@ export function Overlay({ tier }: OverlayProps) {
         const op = envelope(o, a, b, c, d)
         el.style.opacity = String(op)
         el.style.transform = reduced ? 'none' : `translateY(${(1 - op) * 16}px)`
-        // Only the visible block should intercept clicks (links/buttons).
-        el.style.pointerEvents = op > 0.5 ? 'auto' : 'none'
+        // Toggle interactivity of this section's CONTROLS only (the full-screen
+        // block stays pointer-events:none so it never blocks scrolling).
+        el.classList.toggle('shown', op > 0.55)
       }
       // Scroll hint: visible at the very start, gone once scrolling begins.
       if (hintRef.current) {
