@@ -9,9 +9,16 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useScroll } from '@react-three/drei'
 import * as THREE from 'three'
 import { sampleCamera } from '../lib/sequence'
-import { smoothstep } from '../lib/math'
+import { clamp, smoothstep } from '../lib/math'
 import { publishScroll } from '../lib/scrollStore'
 import type { Tier } from '../lib/tier'
+
+// The scene is framed for landscape. On narrower (portrait / phone) screens the
+// horizontal view shrinks, so we widen the vertical FOV to keep the wide
+// content (laptop, panels) inside the frame. Capped to avoid distortion.
+const BASE_FOV = 38
+const DESIGN_ASPECT = 1.6
+const MAX_FOV = 64
 
 interface RigProps {
   tier: Tier
@@ -27,6 +34,16 @@ export function Rig({ tier }: RigProps) {
     const o = scroll.offset
     // Publish for the DOM overlay, which is rendered outside the canvas.
     publishScroll(o)
+
+    // Responsive FOV: widen on narrow/portrait screens so nothing is cropped.
+    const cam = camera as THREE.PerspectiveCamera
+    const aspect = state.size.width / Math.max(1, state.size.height)
+    const targetFov = clamp(BASE_FOV * Math.max(1, DESIGN_ASPECT / aspect), BASE_FOV, MAX_FOV)
+    if (Math.abs(cam.fov - targetFov) > 0.05) {
+      cam.fov = targetFov
+      cam.updateProjectionMatrix()
+    }
+
     sampleCamera(o, pos.current, look.current)
 
     if (!tier.reducedMotion) {
