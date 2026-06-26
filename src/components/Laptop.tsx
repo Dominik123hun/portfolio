@@ -36,9 +36,11 @@ const MODEL_ROT_Y = Math.PI
 const MODEL_POS: [number, number, number] = [0, -0.18, 0]
 
 // Emissive screen overlay, in the LID's local space (so it opens with the lid).
-// Sits just in front of the model's display face and faces the camera.
-const SCREEN_SIZE: [number, number] = [1.33, 0.87]
-const SCREEN_POS: [number, number, number] = [0, 0.46, -0.02]
+// Sits FLUSH on the model's display face (tiny z offset), and is sized to leave
+// the model's taskbar (bottom) and screen bezel (sides/top) visible — so it
+// reads as content shown ON the laptop screen rather than a floating panel.
+const SCREEN_SIZE: [number, number] = [1.2, 0.7]
+const SCREEN_POS: [number, number, number] = [0, 0.54, -0.004]
 const SCREEN_ROT: [number, number, number] = [0, Math.PI, 0]
 // ─────────────────────────────────────────────────────────────────────────
 
