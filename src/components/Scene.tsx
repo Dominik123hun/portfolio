@@ -21,6 +21,7 @@ import {
 import { theme } from '../theme'
 import { PAGES, SCROLL_DAMPING } from '../lib/sequence'
 import type { Tier } from '../lib/tier'
+import { Background } from './Background'
 import { Rig } from './Rig'
 import { Warmup } from './Warmup'
 import { Laptop } from './Laptop'
@@ -38,6 +39,9 @@ export function Scene({ tier }: SceneProps) {
     <>
       <color attach="background" args={[theme.background]} />
       <fog attach="fog" args={[theme.background, 16, 78]} />
+
+      {/* Animated aurora/nebula backdrop, behind everything. */}
+      <Background tier={tier} />
 
       {/* Base + key + accent lighting (env supplies the glossy reflections) */}
       <ambientLight intensity={0.18} />
