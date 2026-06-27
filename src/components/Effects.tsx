@@ -7,9 +7,11 @@
 import { useMemo } from 'react'
 import {
   Bloom,
+  BrightnessContrast,
   ChromaticAberration,
   DepthOfField,
   EffectComposer,
+  HueSaturation,
   Noise,
   Vignette,
 } from '@react-three/postprocessing'
@@ -45,6 +47,10 @@ export function Effects({ tier }: EffectsProps) {
       radius={0.75}
     />,
   ]
+  // Subtle filmic colour grade — a touch more contrast and saturation.
+  passes.push(<BrightnessContrast key="bc" brightness={0.0} contrast={0.08} />)
+  passes.push(<HueSaturation key="hs" hue={0} saturation={0.12} />)
+
   if (tier.dof) {
     passes.push(
       <DepthOfField key="dof" focusDistance={0.012} focalLength={0.04} bokehScale={2.4} height={480} />,

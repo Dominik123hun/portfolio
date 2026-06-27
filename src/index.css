@@ -6,6 +6,8 @@
   --text: #e8ecf5;
 
   --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Space Grotesk', var(--font);
+  --font-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
 
   color-scheme: dark;
 }
@@ -101,21 +103,33 @@ a {
 }
 
 .kicker {
-  display: inline-block;
-  font-size: clamp(11px, 1.1vw, 13px);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: clamp(10px, 1vw, 12px);
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 400;
   color: var(--accent);
-  margin: 0 0 18px;
+  margin: 0 0 22px;
   opacity: 0.95;
+}
+/* little tick before mono labels, very 'studio' */
+.kicker::before {
+  content: '';
+  width: 26px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.7;
 }
 
 .headline {
-  font-size: clamp(28px, 4.4vw, 54px);
-  line-height: 1.08;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4.8vw, 58px);
+  line-height: 1.04;
+  font-weight: 600;
+  letter-spacing: -0.025em;
   margin: 0;
   white-space: pre-line;
   text-shadow: 0 4px 60px rgba(0, 0, 0, 0.6);
@@ -143,10 +157,12 @@ a {
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
 }
 .card-index {
-  font-size: 13px;
+  font-family: var(--font-mono);
+  font-size: 12px;
   letter-spacing: 0.25em;
-  font-weight: 600;
-  color: rgba(232, 236, 245, 0.5);
+  font-weight: 400;
+  color: rgba(232, 236, 245, 0.45);
+  margin-bottom: 14px;
 }
 .card-cat {
   display: inline-block;
@@ -154,19 +170,21 @@ a {
   padding: 6px 12px;
   border: 1px solid rgba(var(--accent-rgb), 0.5);
   border-radius: 999px;
-  font-size: 11px;
+  font-family: var(--font-mono);
+  font-size: 10px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 400;
   color: var(--accent);
   background: rgba(var(--accent-rgb), 0.08);
 }
 .card-title {
-  font-size: clamp(28px, 4.4vw, 52px);
-  line-height: 1.05;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4.6vw, 54px);
+  line-height: 1.02;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  margin: 0 0 16px;
 }
 .card-desc {
   font-size: clamp(14px, 1.5vw, 18px);
@@ -176,20 +194,25 @@ a {
   max-width: 42ch;
 }
 
-/* Buttons / links */
+/* Buttons / links — transform is owned by the magnetic JS, so transitions
+   here cover only colour/shadow to avoid fighting it. */
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 26px;
+  padding: 15px 28px;
   border-radius: 999px;
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: 15px;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.005em;
   text-decoration: none;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  will-change: transform;
+  transition: box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease,
+    color 0.3s ease;
 }
 .btn-primary {
   background: var(--accent);
@@ -197,40 +220,58 @@ a {
   box-shadow: 0 10px 40px rgba(var(--accent-rgb), 0.45);
 }
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 54px rgba(var(--accent-rgb), 0.6);
+  box-shadow: 0 18px 60px rgba(var(--accent-rgb), 0.7);
 }
 .btn-ghost {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.03);
   border-color: rgba(255, 255, 255, 0.16);
   color: var(--text);
 }
 .btn-ghost:hover {
-  transform: translateY(-2px);
-  border-color: rgba(var(--accent-rgb), 0.7);
+  border-color: rgba(var(--accent-rgb), 0.9);
+  background: rgba(var(--accent-rgb), 0.12);
+  color: #fff;
 }
 .btn .arrow {
-  transition: transform 0.25s ease;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .btn:hover .arrow {
-  transform: translateX(4px);
+  transform: translateX(5px);
 }
 
 /* Outro contact line */
 .contact {
-  margin-top: 30px;
+  margin-top: 32px;
   display: flex;
-  gap: 22px;
+  gap: 24px;
   justify-content: center;
   flex-wrap: wrap;
-  font-size: 14px;
-  color: rgba(232, 236, 245, 0.6);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: rgba(232, 236, 245, 0.55);
 }
 .contact a {
+  position: relative;
   color: var(--text);
   text-decoration: none;
-  border-bottom: 1px solid rgba(var(--accent-rgb), 0.6);
-  padding-bottom: 2px;
+  padding-bottom: 3px;
+}
+/* underline draws in on hover */
+.contact a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.contact a:hover::after {
+  transform: scaleX(1);
 }
 
 /* Scroll hint */
@@ -243,7 +284,8 @@ a {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  font-size: 11px;
+  font-family: var(--font-mono);
+  font-size: 10px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: rgba(232, 236, 245, 0.55);
@@ -288,13 +330,85 @@ a {
   top: max(22px, env(safe-area-inset-top));
   left: var(--pad);
   z-index: 6;
+  font-family: var(--font-mono);
   font-weight: 700;
-  letter-spacing: 0.18em;
-  font-size: 14px;
+  letter-spacing: 0.2em;
+  font-size: 13px;
   pointer-events: none;
 }
 .wordmark .dot {
   color: var(--accent);
+}
+
+/* ───────────────────────────── Text reveal ──────────────────────────────
+   Each animatable element sits in a mask; the JS (Overlay) slides the inner
+   element up into view, staggered, as its section enters. */
+
+.reveal-line {
+  display: block;
+  overflow: hidden;
+  /* room so descenders aren't clipped by the mask */
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.reveal {
+  display: block;
+  will-change: transform, opacity;
+}
+
+/* ───────────────────────────── Custom cursor ────────────────────────────
+   A dot + ring that follow the pointer and grow over interactive elements.
+   Hidden on touch / coarse pointers (see media query below). */
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 70;
+  pointer-events: none;
+  border-radius: 50%;
+  mix-blend-mode: difference;
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: #fff;
+}
+.cursor-ring {
+  width: 38px;
+  height: 38px;
+  margin: -19px 0 0 -19px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  transition: width 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+    height 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), margin 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background 0.28s ease, opacity 0.3s ease;
+}
+.cursor-ring.is-hover {
+  width: 66px;
+  height: 66px;
+  margin: -33px 0 0 -33px;
+  background: rgba(255, 255, 255, 0.12);
+}
+.cursor-ring.is-hidden,
+.cursor-dot.is-hidden {
+  opacity: 0;
+}
+
+/* Hide the native cursor only when the custom one is active. */
+body.cursor-on,
+body.cursor-on a,
+body.cursor-on button,
+body.cursor-on .btn {
+  cursor: none;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
 }
 
 /* ───────────────────────────── Preloader ─────────────────────────────── */

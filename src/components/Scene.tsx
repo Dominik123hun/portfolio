@@ -9,7 +9,7 @@
  * premium reflections need no external HDRI and work offline.
  */
 
-import { Suspense } from 'react'
+import { Suspense, useEffect, useMemo } from 'react'
 import {
   AdaptiveDpr,
   AdaptiveEvents,
@@ -18,8 +18,10 @@ import {
   Preload,
   ScrollControls,
 } from '@react-three/drei'
+import * as THREE from 'three'
 import { theme } from '../theme'
 import { PAGES, SCROLL_DAMPING } from '../lib/sequence'
+import { makeGlowTexture } from '../lib/textures'
 import type { Tier } from '../lib/tier'
 import { Background } from './Background'
 import { Rig } from './Rig'
@@ -35,6 +37,9 @@ interface SceneProps {
 }
 
 export function Scene({ tier }: SceneProps) {
+  const groundGlow = useMemo(() => makeGlowTexture(theme.accent), [])
+  useEffect(() => () => groundGlow.dispose(), [groundGlow])
+
   return (
     <>
       <color attach="background" args={[theme.background]} />
@@ -44,10 +49,27 @@ export function Scene({ tier }: SceneProps) {
       <Background tier={tier} />
 
       {/* Base + key + accent lighting (env supplies the glossy reflections) */}
-      <ambientLight intensity={0.18} />
-      <directionalLight position={[5, 8, 4]} intensity={2.1} color="#ffffff" />
-      <pointLight position={[-5, 1.5, -3]} intensity={6} distance={30} decay={0} color={theme.accent} />
+      <ambientLight intensity={0.16} />
+      <directionalLight position={[5, 8, 4]} intensity={2.2} color="#ffffff" />
+      {/* Accent rim light from behind for premium edge separation */}
+      <directionalLight position={[-4, 2.5, -6]} intensity={1.5} color={theme.accent} />
+      <pointLight position={[-5, 1.5, -3]} intensity={5} distance={30} decay={0} color={theme.accent} />
       <pointLight position={[0, 1, 6]} intensity={3} distance={24} decay={0} color="#9db4ff" />
+
+      {/* Soft accent light-pool grounding the laptop — reads as the glowing
+          screen spilling onto a surface. Cheap (no reflection pass) and stays
+          on-concept with the floating-in-space look. */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.3, 0.2]} scale={[1.7, 1, 1]}>
+        <planeGeometry args={[6, 4.4]} />
+        <meshBasicMaterial
+          map={groundGlow}
+          transparent
+          opacity={0.5}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </mesh>
 
       <Suspense fallback={null}>
         {/* Procedural studio environment for soft, premium reflections. */}

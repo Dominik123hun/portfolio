@@ -4,6 +4,7 @@ import { applyThemeToCss, theme } from './theme'
 import { useTier } from './lib/tier'
 import { Scene } from './components/Scene'
 import { Overlay } from './components/Overlay'
+import { Cursor } from './components/Cursor'
 import { Preloader } from './components/Preloader'
 import { ErrorBoundary } from './components/ErrorBoundary'
 
@@ -36,6 +37,7 @@ export default function App() {
       </Canvas>
       {/* Crisp DOM copy over the canvas, synced to scroll via the shared store. */}
       <Overlay tier={tier} />
+      <Cursor tier={tier} />
     </ErrorBoundary>
   )
 }
