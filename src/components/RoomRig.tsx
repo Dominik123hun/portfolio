@@ -11,10 +11,11 @@ import { clamp, damp, lerp } from '../lib/math'
 import { SCREEN } from './Room'
 import type { Tier } from '../lib/tier'
 
-// Seated point of view, looking at the desk / monitor corner.
-const ROOM_POS = new THREE.Vector3(0.12, 1.26, 0.42)
-const ROOM_LOOK = new THREE.Vector3(-0.62, 1.0, -0.72)
-const ROOM_FOV = 52
+// Seated point of view — eye in FRONT of the chair back so the seat isn't in
+// shot, looking across the desk at the monitor corner.
+const ROOM_POS = new THREE.Vector3(0.0, 1.2, -0.25)
+const ROOM_LOOK = new THREE.Vector3(-0.42, 0.95, -0.8)
+const ROOM_FOV = 60
 
 // Pulled in to the monitor so the screen fills the view.
 const FOCUS_POS = SCREEN.center.clone().addScaledVector(SCREEN.normal, 0.52)
