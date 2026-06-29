@@ -66,6 +66,7 @@ interface SceneProps {
 
 export function Scene({ tier, focused, onFocus }: SceneProps) {
   const [hover, setHover] = useState(false)
+  const [bites, setBites] = useState(0)
 
   // Drop hover state when entering focus (the hitbox unmounts).
   useEffect(() => {
@@ -100,9 +101,28 @@ export function Scene({ tier, focused, onFocus }: SceneProps) {
 
         <Warmup />
         <RoomRig tier={tier} focused={focused} />
-        <Room hovered={hover && !focused} />
+        <Room bites={bites} />
         <CRTScreen tier={tier} focused={focused} />
         {!focused && <MonitorGlow hovered={hover} />}
+
+        {/* Eat the burger — each click removes a 90° wedge (4 = gone). */}
+        {bites < 4 && (
+          <mesh
+            position={[-0.736, 0.8, -0.09]}
+            onClick={(e) => {
+              e.stopPropagation()
+              setBites((b) => Math.min(4, b + 1))
+            }}
+            onPointerOver={(e) => {
+              e.stopPropagation()
+              document.body.classList.add('cursor-hot')
+            }}
+            onPointerOut={() => document.body.classList.remove('cursor-hot')}
+          >
+            <boxGeometry args={[0.26, 0.2, 0.26]} />
+            <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+          </mesh>
+        )}
 
         {/* Invisible hitbox over the monitor — click to focus (room mode only). */}
         {!focused && (

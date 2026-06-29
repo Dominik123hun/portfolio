@@ -40,6 +40,7 @@ export default function App() {
         onCreated={({ gl }) => {
           gl.setClearColor(theme.background, 1)
           gl.toneMappingExposure = 0.78
+          gl.localClippingEnabled = true // for the "eaten" burger wedges
         }}
       >
         <Scene tier={tier} focused={focused} onFocus={setFocused} />

@@ -31,7 +31,7 @@ export function CRTScreen({ tier, focused }: CRTScreenProps) {
         transform
         occlude={false}
         position={[0, 0, 0.02]}
-        scale={0.0345}
+        scale={0.043}
         zIndexRange={[2, 0]}
         pointerEvents={focused ? 'auto' : 'none'}
         wrapperClass="crt-wrap"

@@ -42,12 +42,14 @@ export function RoomRig({ tier, focused }: RoomRigProps) {
     pos.current.copy(ROOM_POS).lerp(FOCUS_POS, tt)
     look.current.copy(ROOM_LOOK).lerp(FOCUS_LOOK, tt)
 
-    // Subtle mouse parallax, strongest in room mode.
+    // Mouse look-around (room mode): sweep the gaze so you can glance around
+    // the room. Strong on the look target (yaw/pitch), gentle on position.
     if (!tier.reducedMotion) {
       const par = 1 - tt
-      pos.current.x += state.pointer.x * 0.08 * par
+      pos.current.x += state.pointer.x * 0.1 * par
       pos.current.y += state.pointer.y * 0.05 * par
-      look.current.x += state.pointer.x * 0.03 * par
+      look.current.x += state.pointer.x * 0.38 * par
+      look.current.y += state.pointer.y * 0.2 * par
     }
 
     camera.position.copy(pos.current)
