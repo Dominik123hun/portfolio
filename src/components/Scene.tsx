@@ -19,11 +19,13 @@ import * as THREE from 'three'
 import { Room, SCREEN } from './Room'
 import { RoomRig } from './RoomRig'
 import { CRTScreen } from './CRTScreen'
+import { LangNote } from './LangNote'
 import { Warmup } from './Warmup'
 import { Effects } from './Effects'
 import { makeGlowTexture } from '../lib/textures'
 import { theme } from '../theme'
 import { damp } from '../lib/math'
+import type { Lang } from '../data/i18n'
 import type { Tier } from '../lib/tier'
 
 /** Accent glow halo over the monitor that fades in on hover. */
@@ -62,9 +64,11 @@ interface SceneProps {
   tier: Tier
   focused: boolean
   onFocus: (v: boolean) => void
+  lang: Lang
+  onLang: (l: Lang) => void
 }
 
-export function Scene({ tier, focused, onFocus }: SceneProps) {
+export function Scene({ tier, focused, onFocus, lang, onLang }: SceneProps) {
   const [hover, setHover] = useState(false)
   const [bites, setBites] = useState(0)
 
@@ -102,8 +106,9 @@ export function Scene({ tier, focused, onFocus }: SceneProps) {
         <Warmup />
         <RoomRig tier={tier} focused={focused} />
         <Room bites={bites} />
-        <CRTScreen tier={tier} focused={focused} />
+        <CRTScreen tier={tier} focused={focused} lang={lang} />
         {!focused && <MonitorGlow hovered={hover} />}
+        {!focused && <LangNote lang={lang} onLang={onLang} />}
 
         {/* Eat the burger — each click removes a 90° wedge (4 = gone). */}
         {bites < 4 && (

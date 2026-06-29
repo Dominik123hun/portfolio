@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { applyThemeToCss, theme } from './theme'
 import { useTier } from './lib/tier'
+import { ui, type Lang } from './data/i18n'
 import { Scene } from './components/Scene'
 import { Cursor } from './components/Cursor'
 import { Preloader } from './components/Preloader'
@@ -10,6 +11,8 @@ import { ErrorBoundary } from './components/ErrorBoundary'
 export default function App() {
   const tier = useTier()
   const [focused, setFocused] = useState(false)
+  const [lang, setLang] = useState<Lang>('en')
+  const t = ui[lang]
 
   useEffect(() => {
     applyThemeToCss()
@@ -43,7 +46,13 @@ export default function App() {
           gl.localClippingEnabled = true // for the "eaten" burger wedges
         }}
       >
-        <Scene tier={tier} focused={focused} onFocus={setFocused} />
+        <Scene
+          tier={tier}
+          focused={focused}
+          onFocus={setFocused}
+          lang={lang}
+          onLang={setLang}
+        />
       </Canvas>
 
       {/* DOM overlay: wordmark, the "click the monitor" hint, and a back affordance. */}
@@ -54,14 +63,14 @@ export default function App() {
         </div>
 
         <div className={`room-hint ${focused ? 'is-hidden' : ''}`} aria-hidden>
-          <span className="blink">▸</span> click the monitor
+          <span className="blink">▸</span> {t.hint}
         </div>
 
         <button
           className={`back-btn ${focused ? '' : 'is-hidden'}`}
           onClick={() => setFocused(false)}
         >
-          <span className="arrow">←</span> back to the room
+          <span className="arrow">←</span> {t.back}
         </button>
       </div>
 

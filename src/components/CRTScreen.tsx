@@ -11,14 +11,17 @@ import * as THREE from 'three'
 import { SCREEN } from './Room'
 import { projects } from '../data/projects'
 import { theme } from '../theme'
+import { projectText, ui, type Lang } from '../data/i18n'
 import type { Tier } from '../lib/tier'
 
 interface CRTScreenProps {
   tier: Tier
   focused: boolean
+  lang: Lang
 }
 
-export function CRTScreen({ tier, focused }: CRTScreenProps) {
+export function CRTScreen({ tier, focused, lang }: CRTScreenProps) {
+  const t = ui[lang]
   // Orient the panel coplanar with the screen (its +Z faces the viewer).
   const quat = useMemo(() => {
     const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), SCREEN.normal)
@@ -56,15 +59,15 @@ export function CRTScreen({ tier, focused }: CRTScreenProps) {
                   <span className="crt-col">
                     <span className="crt-name">{p.title}</span>
                     <span className="crt-cat">
-                      {String(i + 1).padStart(2, '0')} · {p.category}
+                      {String(i + 1).padStart(2, '0')} · {projectText(p.id, lang).category}
                     </span>
                   </span>
-                  <span className="crt-open">OPEN ▸</span>
+                  <span className="crt-open">{t.open} ▸</span>
                 </a>
               ))}
             </div>
             <div className="crt-status">
-              {projects.length} ITEMS · {theme.studioName}
+              {projects.length} {t.items} · {theme.studioName}
             </div>
           </div>
           <div className="crt-scan" aria-hidden />
