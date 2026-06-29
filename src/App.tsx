@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { applyThemeToCss, theme } from './theme'
 import { useTier } from './lib/tier'
-import { ui, type Lang } from './data/i18n'
+import { ui, LANGS, type Lang } from './data/i18n'
 import { Scene } from './components/Scene'
 import { Cursor } from './components/Cursor'
 import { Preloader } from './components/Preloader'
@@ -64,6 +64,20 @@ export default function App() {
 
         <div className={`room-hint ${focused ? 'is-hidden' : ''}`} aria-hidden>
           <span className="blink">▸</span> {t.hint}
+        </div>
+
+        {/* Touch fallback for the corkboard sticky note: on phones the view
+            can't pan to the wall, so surface the language switch here too. */}
+        <div className={`lang-bar ${focused ? 'is-hidden' : ''}`}>
+          {LANGS.map((l) => (
+            <button
+              key={l.code}
+              className={lang === l.code ? 'on' : ''}
+              onClick={() => setLang(l.code)}
+            >
+              {l.label}
+            </button>
+          ))}
         </div>
 
         <button

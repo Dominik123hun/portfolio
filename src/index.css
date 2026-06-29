@@ -642,6 +642,46 @@ body.cursor-on .btn {
   color: #ffe65a;
 }
 
+/* Touch-device language switch — the corkboard note is unreachable on phones
+   (no pointer to pan the view), so this pill is shown instead. Hidden on
+   hover-capable devices, where the wall note does the job. */
+.lang-bar {
+  position: fixed;
+  top: max(20px, env(safe-area-inset-top));
+  right: var(--pad);
+  display: none;
+  gap: 4px;
+  pointer-events: auto;
+  background: rgba(8, 10, 16, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  padding: 5px;
+  transition: opacity 0.5s ease;
+}
+@media (hover: none) and (pointer: coarse) {
+  .lang-bar {
+    display: inline-flex;
+  }
+}
+.lang-bar button {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: rgba(232, 236, 245, 0.72);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.lang-bar button.on {
+  background: var(--accent);
+  color: #fff;
+}
+
 /* Hovering the 3D monitor grows the custom cursor ring. */
 body.cursor-hot .cursor-ring {
   width: 70px;
