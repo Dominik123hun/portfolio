@@ -11,11 +11,14 @@ import { clamp, damp, lerp } from '../lib/math'
 import { SCREEN } from './Room'
 import type { Tier } from '../lib/tier'
 
-// Seated point of view — eye in FRONT of the chair back so the seat isn't in
-// shot, looking across the desk at the monitor corner.
-const ROOM_POS = new THREE.Vector3(0.0, 1.2, -0.25)
-const ROOM_LOOK = new THREE.Vector3(-0.42, 0.95, -0.8)
-const ROOM_FOV = 60
+// Seated point of view, looking at the desk / monitor corner.
+const ROOM_POS = new THREE.Vector3(0.12, 1.26, 0.42)
+const ROOM_LOOK = new THREE.Vector3(-0.62, 1.0, -0.72)
+const ROOM_FOV = 52
+
+// The chair sits to the lower-right, so cap how far right/down you can look.
+const MAX_RIGHT = 0.12
+const MIN_DOWN = -0.4
 
 // Pulled in to the monitor so the screen fills the view.
 const FOCUS_POS = SCREEN.center.clone().addScaledVector(SCREEN.normal, 0.52)
@@ -47,10 +50,13 @@ export function RoomRig({ tier, focused }: RoomRigProps) {
     // the room. Strong on the look target (yaw/pitch), gentle on position.
     if (!tier.reducedMotion) {
       const par = 1 - tt
-      pos.current.x += state.pointer.x * 0.1 * par
-      pos.current.y += state.pointer.y * 0.05 * par
-      look.current.x += state.pointer.x * 0.38 * par
-      look.current.y += state.pointer.y * 0.2 * par
+      // Look freely left/up, but limit right/down so the chair stays out of view.
+      const px = Math.min(state.pointer.x, MAX_RIGHT)
+      const py = Math.max(state.pointer.y, MIN_DOWN)
+      pos.current.x += px * 0.1 * par
+      pos.current.y += py * 0.05 * par
+      look.current.x += px * 0.38 * par
+      look.current.y += py * 0.2 * par
     }
 
     camera.position.copy(pos.current)
