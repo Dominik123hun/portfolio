@@ -11,7 +11,7 @@ import * as THREE from 'three'
 import { SCREEN } from './Room'
 import { projects } from '../data/projects'
 import { theme } from '../theme'
-import { projectText, ui, type Lang } from '../data/i18n'
+import { projectText, ui, itemsLabel, type Lang } from '../data/i18n'
 import type { Tier } from '../lib/tier'
 
 interface CRTScreenProps {
@@ -67,7 +67,7 @@ export function CRTScreen({ tier, focused, lang }: CRTScreenProps) {
               ))}
             </div>
             <div className="crt-status">
-              {projects.length} {t.items} · {theme.studioName}
+              {projects.length} {itemsLabel(projects.length, lang)} · {theme.studioName}
             </div>
           </div>
           <div className="crt-scan" aria-hidden />

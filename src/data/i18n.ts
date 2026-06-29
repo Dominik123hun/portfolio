@@ -17,19 +17,16 @@ export const LANGS: { code: Lang; label: string }[] = [
 ]
 
 export const ui: Record<Lang, Record<string, string>> = {
-  en: { hint: 'click the monitor', back: 'back to the room', open: 'OPEN', items: 'ITEMS' },
-  hu: {
-    hint: 'kattints a monitorra',
-    back: 'vissza a szobába',
-    open: 'MEGNYIT',
-    items: 'ELEM',
-  },
-  sk: {
-    hint: 'klikni na monitor',
-    back: 'späť do miestnosti',
-    open: 'OTVORIŤ',
-    items: 'POLOŽKY',
-  },
+  en: { hint: 'click the monitor', back: 'back to the room', open: 'OPEN' },
+  hu: { hint: 'kattints a monitorra', back: 'vissza a szobába', open: 'MEGNYIT' },
+  sk: { hint: 'klikni na monitor', back: 'späť do miestnosti', open: 'OTVORIŤ' },
+}
+
+/** Count-aware "items" word (EN/SK pluralize; HU stays singular after a numeral). */
+export function itemsLabel(n: number, lang: Lang): string {
+  if (lang === 'hu') return 'ELEM'
+  if (lang === 'sk') return n === 1 ? 'POLOŽKA' : n < 5 ? 'POLOŽKY' : 'POLOŽIEK'
+  return n === 1 ? 'ITEM' : 'ITEMS'
 }
 
 type LangText = Record<Lang, string>
@@ -46,38 +43,6 @@ export const projectI18n: Record<string, ProjectI18n> = {
       en: 'A clean, mobile-friendly website for a guesthouse — rooms, rates and contact with a quick path to booking.',
       hu: 'Letisztult, mobilbarát weboldal egy panziónak — szobák, árak és elérhetőség, gyors foglalási lehetőséggel.',
       sk: 'Čistá, mobilná webová stránka pre penzión — izby, ceny a kontakt s rýchlou cestou k rezervácii.',
-    },
-  },
-  aurora: {
-    category: { en: 'Marketing Site', hu: 'Marketing oldal', sk: 'Marketingový web' },
-    description: {
-      en: 'A cinematic brand site with scroll-led storytelling and buttery-smooth motion.',
-      hu: 'Filmes márkaoldal görgetésvezérelt történetmeséléssel és vajsima animációval.',
-      sk: 'Filmová značková stránka s rozprávaním riadeným skrolovaním a hladkou animáciou.',
-    },
-  },
-  monogram: {
-    category: { en: 'Webshop', hu: 'Webáruház', sk: 'E-shop' },
-    description: {
-      en: 'Headless commerce storefront — fast, conversion-tuned and fully responsive.',
-      hu: 'Fejetlen kereskedelmi áruház — gyors, konverzióra hangolt és teljesen reszponzív.',
-      sk: 'Headless e-shop — rýchly, ladený na konverzie a plne responzívny.',
-    },
-  },
-  fieldkit: {
-    category: { en: 'Web App', hu: 'Webalkalmazás', sk: 'Webová aplikácia' },
-    description: {
-      en: 'A realtime collaboration app with offline-first sync and a delightful UX.',
-      hu: 'Valós idejű együttműködő alkalmazás offline-first szinkronnal és kellemes UX-szel.',
-      sk: 'Aplikácia na spoluprácu v reálnom čase s offline-first synchronizáciou a skvelým UX.',
-    },
-  },
-  pulse: {
-    category: { en: 'Analytics Dashboard', hu: 'Analitikai irányítópult', sk: 'Analytický dashboard' },
-    description: {
-      en: 'An analytics dashboard turning billions of events into clear, fast insight.',
-      hu: 'Analitikai irányítópult, amely milliárdnyi eseményt világos, gyors betekintéssé alakít.',
-      sk: 'Analytický dashboard meniaci miliardy udalostí na jasný a rýchly prehľad.',
     },
   },
 }
