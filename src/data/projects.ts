@@ -39,6 +39,16 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: 'penzion-jolan',
+    category: 'Hotel Website',
+    title: 'Penzión Jolán',
+    description:
+      'A clean, mobile-friendly website for a guesthouse — rooms, rates and contact with a quick path to booking.',
+    link: 'https://penzionjolan.eu',
+    kind: 'marketing',
+    hue: '#10b981',
+  },
+  {
     id: 'aurora',
     category: 'Marketing Site',
     title: 'Aurora Labs',

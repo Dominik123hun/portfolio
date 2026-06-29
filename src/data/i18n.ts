@@ -40,6 +40,14 @@ interface ProjectI18n {
 
 /** Translations keyed by project id. */
 export const projectI18n: Record<string, ProjectI18n> = {
+  'penzion-jolan': {
+    category: { en: 'Hotel Website', hu: 'Szálláshely weboldal', sk: 'Hotelový web' },
+    description: {
+      en: 'A clean, mobile-friendly website for a guesthouse — rooms, rates and contact with a quick path to booking.',
+      hu: 'Letisztult, mobilbarát weboldal egy panziónak — szobák, árak és elérhetőség, gyors foglalási lehetőséggel.',
+      sk: 'Čistá, mobilná webová stránka pre penzión — izby, ceny a kontakt s rýchlou cestou k rezervácii.',
+    },
+  },
   aurora: {
     category: { en: 'Marketing Site', hu: 'Marketing oldal', sk: 'Marketingový web' },
     description: {
