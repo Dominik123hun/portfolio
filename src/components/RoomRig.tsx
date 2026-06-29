@@ -50,12 +50,14 @@ export function RoomRig({ tier, focused }: RoomRigProps) {
     // the room. Strong on the look target (yaw/pitch), gentle on position.
     if (!tier.reducedMotion) {
       const par = 1 - tt
-      // Look freely left/up, but limit right/down so the chair stays out of view.
+      // Look freely (and further) left/up, but limit right/down so the chair
+      // stays out of view. Leftward gets a bigger swing than rightward.
       const px = Math.min(state.pointer.x, MAX_RIGHT)
       const py = Math.max(state.pointer.y, MIN_DOWN)
-      pos.current.x += px * 0.1 * par
+      const lookX = px < 0 ? 0.85 : 0.38
+      pos.current.x += px * (px < 0 ? 0.2 : 0.1) * par
       pos.current.y += py * 0.05 * par
-      look.current.x += px * 0.38 * par
+      look.current.x += px * lookX * par
       look.current.y += py * 0.2 * par
     }
 
