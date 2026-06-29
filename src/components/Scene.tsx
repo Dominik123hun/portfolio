@@ -6,7 +6,8 @@
  * portfolio is interactive DOM mapped onto the screen (added in the next step).
  */
 
-import { Suspense } from 'react'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { useFrame } from '@react-three/fiber'
 import {
   AdaptiveDpr,
   AdaptiveEvents,
@@ -14,12 +15,48 @@ import {
   Lightformer,
   Preload,
 } from '@react-three/drei'
+import * as THREE from 'three'
 import { Room, SCREEN } from './Room'
 import { RoomRig } from './RoomRig'
 import { CRTScreen } from './CRTScreen'
 import { Warmup } from './Warmup'
 import { Effects } from './Effects'
+import { makeGlowTexture } from '../lib/textures'
+import { theme } from '../theme'
+import { damp } from '../lib/math'
 import type { Tier } from '../lib/tier'
+
+/** Accent glow halo over the monitor that fades in on hover. */
+function MonitorGlow({ hovered }: { hovered: boolean }) {
+  const ref = useRef<THREE.Mesh>(null!)
+  const tex = useMemo(() => makeGlowTexture(theme.accent), [])
+  useEffect(() => () => tex.dispose(), [tex])
+  const quat = useMemo(() => {
+    const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), SCREEN.normal)
+    return [q.x, q.y, q.z, q.w] as [number, number, number, number]
+  }, [])
+  const pos = useMemo(
+    () => SCREEN.center.clone().addScaledVector(SCREEN.normal, 0.03).toArray(),
+    [],
+  )
+  useFrame((_, dt) => {
+    const m = ref.current.material as THREE.MeshBasicMaterial
+    m.opacity = damp(m.opacity, hovered ? 0.6 : 0, 9, dt)
+  })
+  return (
+    <mesh ref={ref} position={pos} quaternion={quat}>
+      <planeGeometry args={[0.74, 0.62]} />
+      <meshBasicMaterial
+        map={tex}
+        transparent
+        opacity={0}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+        toneMapped={false}
+      />
+    </mesh>
+  )
+}
 
 interface SceneProps {
   tier: Tier
@@ -28,6 +65,16 @@ interface SceneProps {
 }
 
 export function Scene({ tier, focused, onFocus }: SceneProps) {
+  const [hover, setHover] = useState(false)
+
+  // Drop hover state when entering focus (the hitbox unmounts).
+  useEffect(() => {
+    if (focused) {
+      setHover(false)
+      document.body.classList.remove('cursor-hot')
+    }
+  }, [focused])
+
   return (
     <>
       <color attach="background" args={['#04050a']} />
@@ -53,8 +100,9 @@ export function Scene({ tier, focused, onFocus }: SceneProps) {
 
         <Warmup />
         <RoomRig tier={tier} focused={focused} />
-        <Room />
+        <Room hovered={hover && !focused} />
         <CRTScreen tier={tier} focused={focused} />
+        {!focused && <MonitorGlow hovered={hover} />}
 
         {/* Invisible hitbox over the monitor — click to focus (room mode only). */}
         {!focused && (
@@ -66,11 +114,15 @@ export function Scene({ tier, focused, onFocus }: SceneProps) {
             }}
             onPointerOver={(e) => {
               e.stopPropagation()
+              setHover(true)
               document.body.classList.add('cursor-hot')
             }}
-            onPointerOut={() => document.body.classList.remove('cursor-hot')}
+            onPointerOut={() => {
+              setHover(false)
+              document.body.classList.remove('cursor-hot')
+            }}
           >
-            <boxGeometry args={[0.36, 0.32, 0.14]} />
+            <boxGeometry args={[0.46, 0.42, 0.3]} />
             <meshBasicMaterial transparent opacity={0} depthWrite={false} />
           </mesh>
         )}
