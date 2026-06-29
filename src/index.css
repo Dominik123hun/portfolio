@@ -607,8 +607,8 @@ body.cursor-hot .cursor-ring {
   width: 360px;
   height: 270px;
   overflow: hidden;
-  border-radius: 6px;
-  background: #0a5b5f; /* classic teal "desktop" */
+  border-radius: 4px;
+  background: #cdc9bd;
   font-family: var(--font-mono);
   color: #0b0f0a;
   user-select: none;
@@ -618,17 +618,13 @@ body.cursor-hot .cursor-ring {
 .crt.is-on {
   opacity: 1;
 }
-/* the window */
+/* the window — fills the whole screen (fullscreen) */
 .crt-win {
   position: absolute;
-  inset: 14px;
+  inset: 0;
   display: flex;
   flex-direction: column;
   background: #cdc9bd; /* beige 95 window */
-  border: 2px solid #f4f1ea;
-  border-right-color: #6f6b61;
-  border-bottom-color: #6f6b61;
-  box-shadow: inset -1px -1px 0 #8a857a, 2px 2px 0 rgba(0, 0, 0, 0.35);
 }
 .crt-titlebar {
   display: flex;
