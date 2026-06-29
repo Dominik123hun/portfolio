@@ -2,8 +2,8 @@
  * <Room /> — the 90s office cubicle (Sketchfab GLB).
  *
  *  - The monitor screen ("Screen_Emission") is forced OFF/black by default (no
- *    screensaver); it gives a faint power-on glow on hover. The portfolio UI is
- *    drawn over it by <CRTScreen> when focused.
+ *    screensaver); it gives a faint power-on glow on hover. Clicking it opens
+ *    the portfolio (PortfolioOverlay) as a DOM overlay over the dimmed room.
  *  - The burger ("Burger") can be eaten: each `bites` step removes a 90° wedge
  *    via clipping planes through its vertical axis (4 bites = gone).
  */

@@ -4,6 +4,7 @@ import { applyThemeToCss, theme } from './theme'
 import { useTier } from './lib/tier'
 import { ui, LANGS, type Lang } from './data/i18n'
 import { Scene } from './components/Scene'
+import { PortfolioOverlay } from './components/PortfolioOverlay'
 import { Cursor } from './components/Cursor'
 import { Preloader } from './components/Preloader'
 import { ErrorBoundary } from './components/ErrorBoundary'
@@ -55,9 +56,17 @@ export default function App() {
         />
       </Canvas>
 
+      {/* The portfolio window — a DOM overlay shown when the monitor is focused. */}
+      <PortfolioOverlay
+        focused={focused}
+        lang={lang}
+        tier={tier}
+        onClose={() => setFocused(false)}
+      />
+
       {/* DOM overlay: wordmark, the "click the monitor" hint, and a back affordance. */}
       <div className="room-ui">
-        <div className="wordmark">
+        <div className={`wordmark ${focused ? 'is-hidden' : ''}`}>
           {theme.studioName.split(' ')[0]}
           <span className="dot">.</span>
         </div>
