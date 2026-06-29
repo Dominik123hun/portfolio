@@ -37,12 +37,36 @@ interface ProjectI18n {
 
 /** Translations keyed by project id. */
 export const projectI18n: Record<string, ProjectI18n> = {
-  'penzion-jolan': {
-    category: { en: 'Hotel Website', hu: 'Szálláshely weboldal', sk: 'Hotelový web' },
+  aurora: {
+    category: { en: 'Marketing Site', hu: 'Marketing oldal', sk: 'Marketingový web' },
     description: {
-      en: 'A clean, mobile-friendly website for a guesthouse — rooms, rates and contact with a quick path to booking.',
-      hu: 'Letisztult, mobilbarát weboldal egy panziónak — szobák, árak és elérhetőség, gyors foglalási lehetőséggel.',
-      sk: 'Čistá, mobilná webová stránka pre penzión — izby, ceny a kontakt s rýchlou cestou k rezervácii.',
+      en: 'A cinematic brand site with scroll-led storytelling and buttery-smooth motion.',
+      hu: 'Filmes márkaoldal görgetésvezérelt történetmeséléssel és vajsima animációval.',
+      sk: 'Filmová značková stránka s rozprávaním riadeným skrolovaním a hladkou animáciou.',
+    },
+  },
+  monogram: {
+    category: { en: 'Webshop', hu: 'Webáruház', sk: 'E-shop' },
+    description: {
+      en: 'Headless commerce storefront — fast, conversion-tuned and fully responsive.',
+      hu: 'Fejetlen kereskedelmi áruház — gyors, konverzióra hangolt és teljesen reszponzív.',
+      sk: 'Headless e-shop — rýchly, ladený na konverzie a plne responzívny.',
+    },
+  },
+  fieldkit: {
+    category: { en: 'Web App', hu: 'Webalkalmazás', sk: 'Webová aplikácia' },
+    description: {
+      en: 'A realtime collaboration app with offline-first sync and a delightful UX.',
+      hu: 'Valós idejű együttműködő alkalmazás offline-first szinkronnal és kellemes UX-szel.',
+      sk: 'Aplikácia na spoluprácu v reálnom čase s offline-first synchronizáciou a skvelým UX.',
+    },
+  },
+  pulse: {
+    category: { en: 'Analytics Dashboard', hu: 'Analitikai irányítópult', sk: 'Analytický dashboard' },
+    description: {
+      en: 'An analytics dashboard turning billions of events into clear, fast insight.',
+      hu: 'Analitikai irányítópult, amely milliárdnyi eseményt világos, gyors betekintéssé alakít.',
+      sk: 'Analytický dashboard meniaci miliardy udalostí na jasný a rýchly prehľad.',
     },
   },
 }
