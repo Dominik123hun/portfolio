@@ -21,10 +21,13 @@ import type { Tier } from '../lib/tier'
 
 interface EffectsProps {
   tier: Tier
+  /** Override tier.dof (e.g. the room scene tunes its own focus). */
+  dof?: boolean
 }
 
-export function Effects({ tier }: EffectsProps) {
+export function Effects({ tier, dof }: EffectsProps) {
   const caOffset = useMemo(() => new THREE.Vector2(0.0006, 0.0006), [])
+  const useDof = dof ?? tier.dof
 
   // Reduced motion: a single, cheap vignette — nothing animated or heavy.
   if (tier.reducedMotion) {
@@ -40,18 +43,18 @@ export function Effects({ tier }: EffectsProps) {
   const passes: JSX.Element[] = [
     <Bloom
       key="bloom"
-      luminanceThreshold={0.55}
+      luminanceThreshold={0.72}
       luminanceSmoothing={0.25}
-      intensity={tier.bloom}
+      intensity={tier.bloom * 0.85}
       mipmapBlur
-      radius={0.75}
+      radius={0.7}
     />,
   ]
   // Subtle filmic colour grade — a touch more contrast and saturation.
   passes.push(<BrightnessContrast key="bc" brightness={0.0} contrast={0.08} />)
   passes.push(<HueSaturation key="hs" hue={0} saturation={0.12} />)
 
-  if (tier.dof) {
+  if (useDof) {
     passes.push(
       <DepthOfField key="dof" focusDistance={0.012} focalLength={0.04} bokehScale={2.4} height={480} />,
     )

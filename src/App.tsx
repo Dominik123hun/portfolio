@@ -1,25 +1,32 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { applyThemeToCss, theme } from './theme'
 import { useTier } from './lib/tier'
 import { Scene } from './components/Scene'
-import { Overlay } from './components/Overlay'
 import { Cursor } from './components/Cursor'
 import { Preloader } from './components/Preloader'
 import { ErrorBoundary } from './components/ErrorBoundary'
 
 export default function App() {
   const tier = useTier()
+  const [focused, setFocused] = useState(false)
 
   useEffect(() => {
     applyThemeToCss()
+  }, [])
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setFocused(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
   }, [])
 
   return (
     <ErrorBoundary>
       <Preloader />
       <Canvas
-        // `dpr` capped per-tier for performance; composer handles AA.
         dpr={[1, tier.maxDpr]}
         gl={{
           antialias: tier.msaa === 0,
@@ -28,15 +35,35 @@ export default function App() {
           stencil: false,
           depth: true,
         }}
-        camera={{ fov: 38, near: 0.1, far: 220, position: [0, 0.75, 7.5] }}
+        camera={{ fov: 52, near: 0.05, far: 60, position: [0.12, 1.26, 0.42] }}
         performance={{ min: 0.5 }}
-        // StrictMode double-invoke is fine; we never want a transparent clear.
-        onCreated={({ gl }) => gl.setClearColor(theme.background, 1)}
+        onCreated={({ gl }) => {
+          gl.setClearColor(theme.background, 1)
+          gl.toneMappingExposure = 0.78
+        }}
       >
-        <Scene tier={tier} />
+        <Scene tier={tier} focused={focused} onFocus={setFocused} />
       </Canvas>
-      {/* Crisp DOM copy over the canvas, synced to scroll via the shared store. */}
-      <Overlay tier={tier} />
+
+      {/* DOM overlay: wordmark, the "click the monitor" hint, and a back affordance. */}
+      <div className="room-ui">
+        <div className="wordmark">
+          {theme.studioName.split(' ')[0]}
+          <span className="dot">.</span>
+        </div>
+
+        <div className={`room-hint ${focused ? 'is-hidden' : ''}`} aria-hidden>
+          <span className="blink">▸</span> click the monitor
+        </div>
+
+        <button
+          className={`back-btn ${focused ? '' : 'is-hidden'}`}
+          onClick={() => setFocused(false)}
+        >
+          <span className="arrow">←</span> back to the room
+        </button>
+      </div>
+
       <Cursor tier={tier} />
     </ErrorBoundary>
   )
