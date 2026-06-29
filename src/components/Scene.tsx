@@ -18,6 +18,7 @@ import {
 import * as THREE from 'three'
 import { Room, SCREEN } from './Room'
 import { RoomRig } from './RoomRig'
+import { CRTScreen } from './CRTScreen'
 import { LangNote } from './LangNote'
 import { Warmup } from './Warmup'
 import { Effects } from './Effects'
@@ -105,6 +106,7 @@ export function Scene({ tier, focused, onFocus, lang, onLang }: SceneProps) {
         <Warmup />
         <RoomRig tier={tier} focused={focused} />
         <Room bites={bites} />
+        <CRTScreen tier={tier} focused={focused} lang={lang} />
         {!focused && <MonitorGlow hovered={hover} />}
         {!focused && <LangNote lang={lang} onLang={onLang} />}
 

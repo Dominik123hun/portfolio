@@ -691,56 +691,32 @@ body.cursor-hot .cursor-ring {
 }
 
 /* ───────────────────────────── CRT portfolio ────────────────────────────
-   The PORTFOLIO.EXE window, shown when the monitor is focused. Rendered as a
-   responsive DOM overlay over the dimmed 3D room (see PortfolioOverlay.tsx) —
-   not mapped into 3D, so it stays crisp & correctly placed on every device. */
+   Mapped onto the monitor screen via drei <Html transform>. Designed at a
+   fixed pixel size and scaled down to the screen in 3D. */
 
-.crt-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(14px, 5vw, 64px);
-  background: rgba(2, 3, 8, 0);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.45s ease, background 0.45s ease;
-}
-.crt-overlay.is-open {
-  opacity: 1;
-  pointer-events: auto;
-  background: rgba(2, 3, 8, 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+.crt-wrap {
+  /* let the <Html> plane host the CRT; the panel sizes itself */
 }
 .crt {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  width: min(92vw, 720px);
-  max-height: min(82vh, 600px);
+  width: 360px;
+  height: 270px;
   overflow: hidden;
-  border-radius: 6px;
+  border-radius: 4px;
   background: #cdc9bd;
   font-family: var(--font-mono);
   color: #0b0f0a;
   user-select: none;
   opacity: 0;
-  transform: scale(0.96);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transition: opacity 0.45s ease;
 }
 .crt.is-on {
   opacity: 1;
-  transform: scale(1);
 }
-/* the window body — hugs its content, capped by .crt's max-height */
+/* the window — fills the whole screen (fullscreen) */
 .crt-win {
-  position: relative;
-  flex: 1 1 auto;
-  min-height: 0;
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   background: #cdc9bd; /* beige 95 window */
@@ -759,16 +735,6 @@ body.cursor-hot .cursor-ring {
 .crt-winbtns {
   font-size: 12px;
   opacity: 0.9;
-  background: none;
-  border: 0;
-  padding: 0;
-  color: inherit;
-  font-family: inherit;
-  letter-spacing: inherit;
-  cursor: pointer;
-}
-.crt-winbtns:hover {
-  opacity: 1;
 }
 .crt-path {
   padding: 6px 10px 2px;
@@ -777,8 +743,7 @@ body.cursor-hot .cursor-ring {
   opacity: 0.8;
 }
 .crt-list {
-  flex: 1 1 auto;
-  min-height: 0;
+  flex: 1;
   overflow-y: auto;
   padding: 6px 8px 8px;
   display: flex;
