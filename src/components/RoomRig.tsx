@@ -4,7 +4,7 @@
  * the CRT content scrolls natively once focused.
  */
 
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import { clamp, damp, lerp } from '../lib/math'
@@ -38,6 +38,23 @@ export function RoomRig({ tier, focused }: RoomRigProps) {
   const pos = useRef(new THREE.Vector3().copy(ROOM_POS))
   const look = useRef(new THREE.Vector3().copy(ROOM_LOOK))
 
+  // Track the pointer at the window level (raw) and a damped copy used by the
+  // parallax. Driving the look-around from R3F's `state.pointer` would freeze
+  // it whenever the cursor is over a DOM overlay (the corkboard language note
+  // has pointerEvents:auto) — the camera would then jitter as it slid that
+  // note in and out from under a still cursor. clientX/Y is always the true
+  // cursor position, so a held-still cursor settles the camera cleanly.
+  const ptr = useRef({ x: 0, y: 0 })
+  const smooth = useRef({ x: 0, y: 0 })
+  useEffect(() => {
+    const onMove = (e: PointerEvent) => {
+      ptr.current.x = (e.clientX / window.innerWidth) * 2 - 1
+      ptr.current.y = -((e.clientY / window.innerHeight) * 2 - 1)
+    }
+    window.addEventListener('pointermove', onMove, { passive: true })
+    return () => window.removeEventListener('pointermove', onMove)
+  }, [])
+
   useFrame((state, dt) => {
     t.current = damp(t.current, focused ? 1 : 0, 3.5, dt)
     const tt = t.current
@@ -50,10 +67,12 @@ export function RoomRig({ tier, focused }: RoomRigProps) {
     // the room. Strong on the look target (yaw/pitch), gentle on position.
     if (!tier.reducedMotion) {
       const par = 1 - tt
+      smooth.current.x = damp(smooth.current.x, ptr.current.x, 6, dt)
+      smooth.current.y = damp(smooth.current.y, ptr.current.y, 6, dt)
       // Look freely (and further) left/up, but limit right/down so the chair
       // stays out of view. Leftward gets a bigger swing than rightward.
-      const px = Math.min(state.pointer.x, MAX_RIGHT)
-      const py = Math.max(state.pointer.y, MIN_DOWN)
+      const px = Math.min(smooth.current.x, MAX_RIGHT)
+      const py = Math.max(smooth.current.y, MIN_DOWN)
       const lookX = px < 0 ? 0.85 : 0.38
       pos.current.x += px * (px < 0 ? 0.2 : 0.1) * par
       pos.current.y += py * 0.05 * par
